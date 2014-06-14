@@ -1,0 +1,33 @@
+= form_for(@plugin) do |f|
+  - if @plugin.errors.any?
+    div id="error_explanation"
+      р2 = pluralize(@plugin.errors.count, "error") 
+      | prohibited this plugin from being saved:
+
+      ul
+      - @plugin.errors.full_messages.each do |message|
+        li 
+        = message
+
+  .field
+  = f.label :title
+  p
+  = f.text_field :title
+  br
+  .field
+  = f.label :description
+  p
+  = f.text_area :description, placeholder: "Enter descroption"
+  br
+  .field
+  = f.label :link
+  p
+  = f.text_field :link, placeholder: "Enter link"
+  br
+  .field
+  = f.label :tag
+  p
+  = f.text_field :tag_list, placeholder: "Enter title"
+
+  .actions
+  = f.submit

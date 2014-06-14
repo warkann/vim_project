@@ -1,0 +1,18 @@
+<% if user_signed_in? %>
+  <%= link_to 'Listing users', root_path %> &nbsp||
+  <br>
+  <%= link_to "Add plugin", new_plugin_path %>&nbsp||
+  <%= link_to 'Show all plugins', plugins_path %>&nbsp||
+  <br>
+  <%= link_to 'Add post', new_post_path %>&nbsp||
+  <%= link_to 'Show all posts', posts_path %>&nbsp||
+  <br>
+  <%= link_to 'Add color schema', new_colorschema_path %>&nbsp||
+  <%= link_to 'Show all color schemas', colorschemas_path %>&nbsp||
+  <br>
+  <%= link_to 'Add dotfile', new_dotfile_path %>&nbsp||
+  <%= link_to 'Show all dotfiles', dotfiles_path %>&nbsp||
+  <br>
+  <%= link_to 'Add hack', new_hack_path %>&nbsp||
+  <%= link_to 'Show all hacks', hacks_path%>&nbsp||
+<% end %>

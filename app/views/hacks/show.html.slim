@@ -1,0 +1,13 @@
+p#notice = notice
+
+p
+  strong Title:
+  = @hack.title
+p
+  strong Body:
+  = @hack.body
+
+- if current_user.admin? || current_user.id == @hack.user_id
+	= link_to 'Edit', edit_hack_path(@hack)
+'|
+= link_to 'Back', hacks_path

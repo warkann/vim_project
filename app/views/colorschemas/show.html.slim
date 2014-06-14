@@ -1,0 +1,13 @@
+p#notice = notice
+
+p
+  strong Title:
+  = @colorschema.title
+p
+  strong Body:
+  = @colorschema.body
+
+- if current_user.admin? || current_user.id == @colorschema.user_id
+	= link_to 'Edit', edit_colorschema_path(@colorschema)
+'|
+= link_to 'Back', colorschemas_path

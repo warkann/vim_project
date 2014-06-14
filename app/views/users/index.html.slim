@@ -1,0 +1,13 @@
+- if flash[:error].present?
+	here is massege: 
+	= flash[:error]
+	br
+
+- if user_signed_in?
+	- User.find_each do |person|
+		b 
+		= link_to person.email, user_path(person)
+		= image_tag(person.user_img_url) if person.user_img?
+		br
+		br
+	= link_to 'Home', root_path

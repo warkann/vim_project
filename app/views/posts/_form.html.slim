@@ -1,0 +1,29 @@
+= form_for(@post) do |f|
+  - if @post.errors.any?
+    div id="error_explanation"
+      р2 = pluralize(@post.errors.count, "error") 
+      | prohibited this plugin from being saved:
+
+      ul
+      - @post.errors.full_messages.each do |message|
+        li 
+        = message
+
+  .textfield
+  = f.text_field :title, placeholder: "Enter title"
+  br
+
+  = f.text_area :body, placeholder: "Enter text"
+  br
+
+  .textfield
+  = f.text_field :tag_list, placeholder: "Enter tag"
+  br
+
+  = f.label 'Add image'
+  = image_tag(@post.post_img_url) if @post.post_img?
+  = f.file_field :post_img
+  = f.hidden_field :post_img_cache
+
+  .actions
+  = f.submit

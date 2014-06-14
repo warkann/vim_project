@@ -1,0 +1,25 @@
+h1 Listing dotfiles
+
+table
+  thead
+    tr
+      th Title
+      th Body
+      th Owner
+      th
+      th
+
+  tbody
+    - @dotfiles.each do |dotfile|
+      tr
+        td = dotfile.title
+        td = dotfile.body
+        td = dotfile.user.email
+        td = link_to 'Show', dotfile
+        - if current_user.admin? || current_user.id == dotfile.user_id
+          td = link_to 'Edit', edit_dotfile_path(dotfile)
+          td = link_to 'Destroy', dotfile, data: {:confirm => 'Are you sure?'}, :method => :delete
+
+br
+
+= link_to 'New Dotfile', new_dotfile_path

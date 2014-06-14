@@ -1,0 +1,13 @@
+p#notice = notice
+
+p
+  strong Title:
+  = @dotfile.title
+p
+  strong Body:
+  = @dotfile.body
+
+- if current_user.admin? || current_user.id == @dotfile.user_id
+	= link_to 'Edit', edit_dotfile_path(@dotfile)
+'|
+= link_to 'Back', dotfiles_path

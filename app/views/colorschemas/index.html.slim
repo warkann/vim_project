@@ -1,0 +1,27 @@
+h1 Listing colorschemas
+
+table
+  thead
+    tr
+      th Title
+      th Body
+      th Owner
+      th
+      th
+      th
+
+  tbody
+    - @colorschemas.each do |colorschema|
+      tr
+        td = colorschema.title
+        td = colorschema.body
+        td = colorschema.user.email
+        td = image_tag(colorschema.colorschema_img_url) if colorschema.colorschema_img?
+        td = link_to 'Show', colorschema
+        - if current_user.admin? || current_user.id == colorschema.user_id
+          td = link_to 'Edit', edit_colorschema_path(colorschema)
+          td = link_to 'Destroy', colorschema, data: {:confirm => 'Are you sure?'}, :method => :delete
+
+br
+
+= link_to 'New Colorschema', new_colorschema_path

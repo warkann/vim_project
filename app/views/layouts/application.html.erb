@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Vim</title>
+  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+  <%= csrf_meta_tags %>
+</head>
+
+
+<ul class="hmenu"> 
+  <% if user_signed_in? %><h4> Logged as: <%= current_user.nickname %> <% end %>
+  <%= render 'devise/menu/registration_items' %>
+  <%= render 'devise/menu/login_items' %>
+</ul>
+<div id="navbar">
+  <%= render "layouts/navbar" %>
+</div>
+
+<body>
+<%= yield %>
+<%= debug(params) if Rails.env.development? %>
+
+</body>
+</html>

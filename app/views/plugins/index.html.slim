@@ -1,0 +1,27 @@
+h1 Listing plugins
+
+table
+  thead
+    tr
+      th Title
+      th Description
+      th Owner
+      th Tags
+      th
+      th
+
+  tbody
+    - @plugins.each do |plugin|
+      tr
+        td = plugin.title
+        td = plugin.description
+        td = plugin.user.email
+        td = raw plugin.tag_list.map { |t| link_to t, plugins_tags_path(t) }.join(', ')
+        td = link_to 'Show', plugin
+        - if current_user.admin? || current_user.id == plugin.user_id
+          td = link_to 'Edit', edit_plugin_path(plugin)
+          td = link_to 'Destroy', plugin, method: :delete, data: { confirm: 'Are you sure?' }
+
+br
+
+= link_to 'New Plugin', new_plugin_path 
