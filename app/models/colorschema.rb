@@ -1,4 +1,7 @@
 class Colorschema < ActiveRecord::Base
+	validates_presence_of :title
+	validates_presence_of :body
+
 	belongs_to :user
 
 	mount_uploader :colorschema_img, ColorschemasImgUploader

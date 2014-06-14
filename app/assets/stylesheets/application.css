@@ -13,8 +13,7 @@
  *= require_tree .
  *= require_self
  */
-
-ul.hmenu {
+ ul.hmenu {
   list-style: none; 
   margin: 0 0 2em;
   padding: 0;

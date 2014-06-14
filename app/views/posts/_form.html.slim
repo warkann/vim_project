@@ -1,13 +1,10 @@
-= form_for(@post) do |f|
+= form_for @post do |f|
   - if @post.errors.any?
-    div id="error_explanation"
-      р2 = pluralize(@post.errors.count, "error") 
-      | prohibited this plugin from being saved:
-
+    #error_explanation
+      h2 = "#{pluralize(@post.errors.count, "error")} prohibited this colorschema from being saved:"
       ul
-      - @post.errors.full_messages.each do |message|
-        li 
-        = message
+        - @post.errors.full_messages.each do |message|
+          li = message
 
   .textfield
   = f.text_field :title, placeholder: "Enter title"

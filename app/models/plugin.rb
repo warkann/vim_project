@@ -1,4 +1,8 @@
 class Plugin < ActiveRecord::Base
+	validates_presence_of :title
+	validates_presence_of :description
+	validates_presence_of :link
+
 	belongs_to :user
 	acts_as_taggable
 
