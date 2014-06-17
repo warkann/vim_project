@@ -3,6 +3,8 @@ class PluginsController < ApplicationController
   before_action :correct_user, only: [:edit, :update, :destroy]
 
   def index
+    work_with_tags(:Plugin)
+
     if params[:tag]
       @plugins = Plugin.tagged_with(params[:tag])
     else

@@ -1,27 +1,22 @@
 h1 Listing plugins
 
-table
-  thead
-    tr
-      th Title
-      th Description
-      th Owner
-      th Tags
-      th
-      th
+- @plugins.find_all do |plugin|
+  | title:&nbsp
+  strong = link_to plugin.title, plugin_path(plugin)
+  | &nbsp tag:&nbsp
+  strong = raw plugin.tag_list.map { |t| link_to t, plugins_tags_path(t) }.join(', ')
+  br
 
-  tbody
-    - @plugins.each do |plugin|
-      tr
-        td = plugin.title
-        td = plugin.description
-        td = plugin.user.email
-        td = raw plugin.tag_list.map { |t| link_to t, plugins_tags_path(t) }.join(', ')
-        td = link_to 'Show', plugin
-        - if current_user.admin? || current_user.id == plugin.user_id
-          td = link_to 'Edit', edit_plugin_path(plugin)
-          td = link_to 'Destroy', plugin, method: :delete, data: { confirm: 'Are you sure?' }
+  br
 
 br
 
-= link_to 'New Plugin', new_plugin_path 
+- @tag_statistic.each do |tag_name, count|
+  = link_to tag_name, plugins_tags_path(tag_name)
+  | &nbsp&nbsp
+  = count
+  br
+
+= link_to 'New Plugin', new_plugin_path
+
+br

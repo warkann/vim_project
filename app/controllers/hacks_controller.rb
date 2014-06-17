@@ -3,6 +3,7 @@ class HacksController < ApplicationController
   before_action :correct_user, only: [:edit, :update, :destroy]
 
   def index
+    @tags = Tag.all
     if params[:tag]
       @hacks = Hack.tagged_with(params[:tag])
     else
