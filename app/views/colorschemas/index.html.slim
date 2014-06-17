@@ -16,7 +16,7 @@ table
         td = colorschema.title
         td = colorschema.body
         td = colorschema.user.email
-        td = image_tag(colorschema.colorschema_img_url) if colorschema.colorschema_img?
+        td = image_tag(colorschema.colorschema_img_url(:thumb)) if colorschema.colorschema_img?
         td = link_to 'Show', colorschema
         - if current_user.admin? || current_user.id == colorschema.user_id
           td = link_to 'Edit', edit_colorschema_path(colorschema)

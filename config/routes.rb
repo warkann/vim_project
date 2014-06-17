@@ -5,9 +5,10 @@ Rails.application.routes.draw do
   devise_for :users
   resources :users
   resources :plugins
-  get 'tags/:tag', to: 'posts#index', as: :posts_tags  
-  get 'tags/:tag', to: 'hacks#index', as: :hacks_tags
-  get 'tags/:tag', to: 'plugins#index', as: :plugins_tags
+  get 'plugins_tags/:tag', to: 'plugins#index', as: :plugins_tags
+  get 'posts_tags/:tag', to: 'posts#index', as: :posts_tags  
+  get 'hacks_tags/:tag', to: 'hacks#index', as: :hacks_tags
+ 
   resources :posts
 
   # The priority is based upon order of creation: first created -> highest priority.

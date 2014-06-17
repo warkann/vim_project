@@ -19,15 +19,5 @@ table
 
 br
 
-/ эта часть для отображения списка ТОП-10 тегов
-h2 Top 10 tags
 
-- @tags.each do |tag|
-  ul 
-  = tag.name
-  | &nbsp - 
-  = tag.taggings_count
-
-br
-
-= link_to 'New Plugin', new_post_path
+= link_to 'New Post', new_post_path
