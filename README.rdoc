@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 == README update_by_warkann
+=======
+== README! update
+>>>>>>> 212b0e4d2f7a05a9179ea6df1bac19cb2e365e74
 
 This README would normally document whatever steps are necessary to get the
 application up and running.
