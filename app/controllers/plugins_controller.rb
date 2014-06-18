@@ -1,6 +1,8 @@
 class PluginsController < ApplicationController
   before_action :set_plugin, only: [:show, :edit, :update, :destroy]
-  before_action :correct_user, only: [:edit, :update, :destroy]
+  before_action :give_access_to_edit_record, only: [:edit, :update, :destroy]
+  before_action :give_access_to_add_record, except: [:index, :show]
+
 
   def index
 # Этот метод из application_controller.rb, предназначен для отображения количества используемых
@@ -57,21 +59,28 @@ class PluginsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
     def set_plugin
       @plugin = Plugin.friendly.find(params[:id])
     end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
     def plugin_params
       params.require(:plugin).permit(current_user.id, :title, :description, :link, :tag_list, :tag, :slug)
     end
 
-    def correct_user
-      unless current_user.admin? || current_user.id == @plugin.user_id
-        flash[:error] = "Access denied"
+
+# даем разрешение на редактирование и удаление записей только админам, модераторам и создателям этой записи
+    def give_access_to_edit_record
+      unless current_user.access_code == 111 || 
+              current_user.access_code == 110 || 
+              current_user.id == @plugin.user_id
+        
+        flash[:error] = "You can't do it"
         redirect_to root_path
       end
     end
 
+# даем разрешение на создание новых записей всем зарегестрированным пользователям
+    def give_access_to_add_record
+      redirect_to root_path if current_user.nil?
+    end
 end

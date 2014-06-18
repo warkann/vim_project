@@ -17,6 +17,7 @@
 #  user_img            :string(255)      default("")
 #  created_at          :datetime
 #  updated_at          :datetime
+#  access_code         :integer          default(1)
 #
 
 class User < ActiveRecord::Base
@@ -47,4 +48,6 @@ class User < ActiveRecord::Base
   def should_generate_new_friendly_id?
     nickname_changed? || slug.blank?
   end
+
+  ROLES = [["Admin", 111], ["Moderator", 110], ["User", 100]]
 end

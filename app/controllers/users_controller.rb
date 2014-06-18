@@ -1,11 +1,17 @@
 class UsersController < ApplicationController
-  before_action :set_user, only: [:show, :edit, :update, :destroy]	
+  before_action :set_user, only: [:show, :edit, :update, :destroy]
+  before_action :user_admin?, only: [:edit, :update, :destroy]
 
 	def index
 	end
 
 	def edit
-		@user.update_attributes(:admin => 'true')
+	end
+
+	def update
+# обновляем поле access_code. user_params содержит одно значение - value из drop-box'a
+# вьюхи user/edit
+		@user.update(user_params)
 		redirect_to @user
 	end
 	
@@ -23,9 +29,18 @@ class UsersController < ApplicationController
 
 private
 
-	# Use callbacks to share common setup or constraints between actions.
   def set_user
     @user = User.friendly.find(params[:id])
   end
 
+  def user_params
+    params.require(:user).permit(:access_code)
+  end
+
+  def user_admin?
+  	unless current_user.access_code == 111
+  		flash[:error] = "You can't do this"
+  		redirect_to root_path
+  	end
+  end
 end

@@ -12,9 +12,6 @@ class PostsController < ApplicationController
     else
 		  @posts = Post.all
     end
-  # эта часть для отображения списка ТОП-10 тегов
-    @tags = Tag.order('taggings_count DESC')
-    @tags.first(10)
 	end
 
 	def show

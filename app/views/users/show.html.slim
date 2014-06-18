@@ -4,5 +4,4 @@ h3 User email: #{@user.email}
 - if current_user.admin? && current_user != @user
 	= link_to 'Delete', @user, method: :delete, data: {confirm: "Are you sure?"}
 	|	||  
-- if current_user.admin? && !@user.admin?
-	= link_to 'Set admin status', edit_user_path(@user)
+	= link_to 'Add role', edit_user_path(@user)

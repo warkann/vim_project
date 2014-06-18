@@ -6,9 +6,5 @@ h3 Link:
 = @plugin.link
 br
 br
-- if current_user.admin? || current_user.id == @plugin.user_id
-	= link_to 'Edit', edit_plugin_path(@plugin)
-	br
-	= link_to 'Delete', @plugin, method: :delete, data: { confirm: 'Are you sure?' }
-|  || 
+
 = link_to 'Back', plugins_path
