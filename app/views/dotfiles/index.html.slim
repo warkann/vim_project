@@ -16,9 +16,6 @@ table
         td = dotfile.body
         td = dotfile.user.email
         td = link_to 'Show', dotfile
-        - if current_user.admin? || current_user.id == dotfile.user_id
-          td = link_to 'Edit', edit_dotfile_path(dotfile)
-          td = link_to 'Destroy', dotfile, data: {:confirm => 'Are you sure?'}, :method => :delete
 
 br
 

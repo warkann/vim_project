@@ -1,6 +1,7 @@
 class UsersController < ApplicationController
   before_action :set_user, only: [:show, :edit, :update, :destroy]
   before_action :user_admin?, only: [:edit, :update, :destroy]
+  before_action :user_present?
 
 	def index
 	end
@@ -9,8 +10,8 @@ class UsersController < ApplicationController
 	end
 
 	def update
-# обновляем поле access_code. user_params содержит одно значение - value из drop-box'a
-# вьюхи user/edit
+		# обновляем поле access_code. user_params содержит одно значение - value из drop-box'a
+		# вьюхи user/edit
 		@user.update(user_params)
 		redirect_to @user
 	end
@@ -42,5 +43,10 @@ private
   		flash[:error] = "You can't do this"
   		redirect_to root_path
   	end
+  end
+
+  # отправка на root_path вызывает рекурсию
+  def user_present?
+  	redirect_to plugins_path if current_user.nil?
   end
 end

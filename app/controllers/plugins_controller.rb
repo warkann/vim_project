@@ -1,12 +1,11 @@
 class PluginsController < ApplicationController
   before_action :set_plugin, only: [:show, :edit, :update, :destroy]
-  before_action :give_access_to_edit_record, only: [:edit, :update, :destroy]
-  before_action :give_access_to_add_record, except: [:index, :show]
+
 
 
   def index
-# Этот метод из application_controller.rb, предназначен для отображения количества используемых
-# в данной модели тэгов, в качестве аргумента передается название модели с заглавной буквы
+    # Этот метод из application_controller.rb, предназначен для отображения количества используемых
+    # в данной модели тэгов, в качестве аргумента передается название модели с заглавной буквы
     work_with_tags(:Plugin)
 
     if params[:tag]
@@ -66,21 +65,5 @@ class PluginsController < ApplicationController
     def plugin_params
       params.require(:plugin).permit(current_user.id, :title, :description, :link, :tag_list, :tag, :slug)
     end
+  end
 
-
-# даем разрешение на редактирование и удаление записей только админам, модераторам и создателям этой записи
-    def give_access_to_edit_record
-      unless current_user.access_code == 111 || 
-              current_user.access_code == 110 || 
-              current_user.id == @plugin.user_id
-        
-        flash[:error] = "You can't do it"
-        redirect_to root_path
-      end
-    end
-
-# даем разрешение на создание новых записей всем зарегестрированным пользователям
-    def give_access_to_add_record
-      redirect_to root_path if current_user.nil?
-    end
-end
