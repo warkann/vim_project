@@ -1,26 +1,22 @@
 h1 Listing hacks
 
-table
-  thead
-    tr
-      th Title
-      th Body
-      th Owner
-      th Tags
-      th
+- @hacks.find_all do |hack|
+  | title:&nbsp
+  strong = link_to hack.title, hack_path(hack)
+  | &nbsp tag:&nbsp
+  strong = raw hack.tag_list.map { |t| link_to t, hacks_tags_path(t) }.join(', ')
+  br
 
-  tbody
-    - @hacks.each do |hack|
-      tr
-        td = hack.title
-        td = hack.body
-        td = hack.user.email
-        td = raw hack.tag_list.map { |t| link_to t, hacks_tags_path(t) }.join(', ')
-        td = link_to 'Show', hack
-        - if current_user.admin? || current_user.id == hack.user_id        
-          td = link_to 'Edit', edit_hack_path(hack)
-          td = link_to 'Destroy', hack, data: {:confirm => 'Are you sure?'}, :method => :delete
+  br
 
 br
 
+- @tag_statistic.each do |tag_name, count|
+  = link_to tag_name, hacks_tags_path(tag_name)
+  | &nbsp&nbsp
+  = count
+  br
+
 = link_to 'New Hack', new_hack_path
+
+br

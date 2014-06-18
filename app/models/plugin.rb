@@ -1,3 +1,17 @@
+# == Schema Information
+#
+# Table name: plugins
+#
+#  id          :integer          not null, primary key
+#  title       :string(255)      not null
+#  description :string(255)      not null
+#  link        :string(255)      not null
+#  user_id     :integer          not null
+#  slug        :string(255)      not null
+#  created_at  :datetime
+#  updated_at  :datetime
+#
+
 class Plugin < ActiveRecord::Base
 	validates_presence_of :title
 	validates_presence_of :description

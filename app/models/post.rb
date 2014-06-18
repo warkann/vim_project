@@ -1,3 +1,17 @@
+# == Schema Information
+#
+# Table name: posts
+#
+#  id         :integer          not null, primary key
+#  title      :string(255)      not null
+#  body       :string(255)      not null
+#  user_id    :integer          not null
+#  post_img   :string(255)      default("")
+#  slug       :string(255)      not null
+#  created_at :datetime
+#  updated_at :datetime
+#
+
 class Post < ActiveRecord::Base
 	validates_presence_of :title
 	validates_presence_of :body

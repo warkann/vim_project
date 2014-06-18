@@ -3,6 +3,8 @@ class PluginsController < ApplicationController
   before_action :correct_user, only: [:edit, :update, :destroy]
 
   def index
+# Этот метод из application_controller.rb, предназначен для отображения количества используемых
+# в данной модели тэгов, в качестве аргумента передается название модели с заглавной буквы
     work_with_tags(:Plugin)
 
     if params[:tag]

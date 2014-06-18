@@ -1,3 +1,17 @@
+# == Schema Information
+#
+# Table name: colorschemas
+#
+#  id              :integer          not null, primary key
+#  title           :string(255)      not null
+#  body            :text             not null
+#  user_id         :integer          not null
+#  colorschema_img :string(255)      default("")
+#  slug            :string(255)      not null
+#  created_at      :datetime
+#  updated_at      :datetime
+#
+
 class Colorschema < ActiveRecord::Base
 	validates_presence_of :title
 	validates_presence_of :body

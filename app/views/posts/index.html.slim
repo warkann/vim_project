@@ -1,23 +1,23 @@
 h1 Listing posts
 
-table
-  thead
-    tr
-      th colspan="3"
 
-  tbody
-    - @posts.each do |post|
-      tr
-        td = post.title
-        td = post.user.email
-        td = raw post.tag_list.map { |t| link_to t, posts_tags_path(t) }.join(', ')
-        td = image_tag(post.post_img_url(:thumb))
-        td = link_to 'Show', post
-        - if current_user.admin? || current_user.id == post.user_id
-          td = link_to 'Edit', edit_post_path(post)
-          td = link_to 'Destroy', post, method: :delete, data: { confirm: 'Are you sure?' }
+- @posts.find_all do |post|
+  | title:&nbsp
+  strong = link_to post.title, post_path(post)
+  | &nbsp tag:&nbsp
+  strong = raw post.tag_list.map { |t| link_to t, posts_tags_path(t) }.join(', ')
+  br
+
+  br
 
 br
 
+- @tag_statistic.each do |tag_name, count|
+  = link_to tag_name, posts_tags_path(tag_name)
+  | &nbsp&nbsp
+  = count
+  br
 
 = link_to 'New Post', new_post_path
+
+br

@@ -1,3 +1,16 @@
+# == Schema Information
+#
+# Table name: hacks
+#
+#  id         :integer          not null, primary key
+#  title      :string(255)      not null
+#  body       :text             not null
+#  user_id    :integer          not null
+#  slug       :string(255)      not null
+#  created_at :datetime
+#  updated_at :datetime
+#
+
 class Hack < ActiveRecord::Base
 	validates_presence_of :title
 	validates_presence_of :body
