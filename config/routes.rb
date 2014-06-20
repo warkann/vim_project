@@ -8,6 +8,7 @@ Rails.application.routes.draw do
   get 'plugins_tags/:tag', to: 'plugins#index', as: :plugins_tags
   get 'posts_tags/:tag', to: 'posts#index', as: :posts_tags  
   get 'hacks_tags/:tag', to: 'hacks#index', as: :hacks_tags
+  get 'plugins_vote/:id', to: 'plugins#vote', as: :vote
  
   resources :posts
 

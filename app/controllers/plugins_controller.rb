@@ -1,6 +1,6 @@
 class PluginsController < ApplicationController
-  before_action :set_plugin, only: [:show, :edit, :update, :destroy]
-  before_action :give_access_to_edit_record, only: [:edit, :update, :destroy]
+  before_action :set_plugin, only: [:show, :edit, :update, :destroy, :vote]
+  before_action :give_access_to_edit_record, only: [:edit, :update, :destroy, :vote]
   before_action :give_access_to_add_record, except: [:index, :show]
 
   def index
@@ -11,7 +11,7 @@ class PluginsController < ApplicationController
     if params[:tag]
       @plugins = Plugin.tagged_with(params[:tag])
     else
-      @plugins = Plugin.all
+      @plugins = Plugin.order('created_at ASC')
     end
   end
 
@@ -57,6 +57,19 @@ class PluginsController < ApplicationController
     end
   end
 
+  # метод, отвечающий за рейтинг плагина
+  def vote
+
+    # увеличиваем на 1 рейтинг плагина и записываем в массив id текущего пользователя только один раз
+    unless @plugin.voted.include?(current_user.id)
+      @plugin.increment!(:popularity)
+      @plugin.voted += [current_user.id]
+    end
+
+    @plugin.save
+    redirect_to plugins_path
+  end
+
   private
     
     def set_plugin
@@ -64,7 +77,7 @@ class PluginsController < ApplicationController
     end
 
     def plugin_params
-      params.require(:plugin).permit(:title, :description, :link, :tag_list, :tag, :slug)
+      params.require(:plugin).permit(:title, :description, :link, :tag_list, :tag, :slug, :popularity)
     end
 
     # даем разрешение на редактирование и удаление записей только админам, модераторам и создателям этой записи
@@ -81,5 +94,5 @@ class PluginsController < ApplicationController
     # даем разрешение на создание новых записей всем зарегестрированным пользователям
     def give_access_to_add_record
       redirect_to plugins_path if current_user.nil?
-    end 
+    end
   end
