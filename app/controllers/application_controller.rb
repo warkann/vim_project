@@ -1,8 +1,6 @@
 class ApplicationController < ActionController::Base
   before_action :configure_devise_permitted_parameters, if: :devise_controller?
-  before_action :give_access_to_edit_record, only: [:edit, :update, :destroy]
-  before_action :give_access_to_add_record, except: [:index, :show]  
-
+  
   protect_from_forgery with: :exception
 
   protected
@@ -38,21 +36,5 @@ class ApplicationController < ActionController::Base
         tag_name = Tag.find(t).name
         @tag_statistic.update( tag_name => counter)
     end
-
-    # даем разрешение на редактирование и удаление записей только админам, модераторам и создателям этой записи
-    def give_access_to_edit_record
-      unless current_user == nil ||
-              current_user.access_code == 111 || 
-              current_user.access_code == 110 || 
-              current_user.id == @plugin.user_id
-        flash[:error] = "You can't do it"
-        redirect_to root_path
-      end
-    end
-
-    # даем разрешение на создание новых записей всем зарегестрированным пользователям
-    def give_access_to_add_record
-      redirect_to root_path if current_user.nil?
-    end 
   end
 end

@@ -1,7 +1,7 @@
 class PluginsController < ApplicationController
   before_action :set_plugin, only: [:show, :edit, :update, :destroy]
-
-
+  before_action :give_access_to_edit_record, only: [:edit, :update, :destroy]
+  before_action :give_access_to_add_record, except: [:index, :show]
 
   def index
     # Этот метод из application_controller.rb, предназначен для отображения количества используемых
@@ -58,12 +58,28 @@ class PluginsController < ApplicationController
   end
 
   private
+    
     def set_plugin
       @plugin = Plugin.friendly.find(params[:id])
     end
 
     def plugin_params
-      params.require(:plugin).permit(current_user.id, :title, :description, :link, :tag_list, :tag, :slug)
+      params.require(:plugin).permit(:title, :description, :link, :tag_list, :tag, :slug)
     end
-  end
 
+    # даем разрешение на редактирование и удаление записей только админам, модераторам и создателям этой записи
+    def give_access_to_edit_record
+      unless current_user == nil ||
+              current_user.access_code == 111 || 
+              current_user.access_code == 110 || 
+              current_user.id == @plugin.user_id
+        flash[:error] = "You can't do it"
+        redirect_to plugins_path
+      end
+    end
+
+    # даем разрешение на создание новых записей всем зарегестрированным пользователям
+    def give_access_to_add_record
+      redirect_to plugins_path if current_user.nil?
+    end 
+  end

@@ -1,10 +1,11 @@
 class PostsController < ApplicationController
   before_action :set_post, only: [:show, :edit, :update, :destroy]
-  before_action :correct_user, only: [:edit, :update, :destroy]
-
+  before_action :give_access_to_edit_record, only: [:edit, :update, :destroy]
+  before_action :give_access_to_add_record, except: [:index, :show]
+ 
 	def index
-# Этот метод из application_controller.rb, предназначен для отображения количества используемых
-# в данной модели тэгов, в качестве аргумента передается название модели с заглавной буквы    
+    # Этот метод из application_controller.rb, предназначен для отображения количества используемых
+    # в данной модели тэгов, в качестве аргумента передается название модели с заглавной буквы    
     work_with_tags(:Post)
 
     if params[:tag]
@@ -56,22 +57,29 @@ class PostsController < ApplicationController
     end
 	end
 
-private
+  private
 
-	# Use callbacks to share common setup or constraints between actions.
-  def set_post
-    @post = Post.friendly.find(params[:id])
-  end
-
-  # Never trust parameters from the scary internet, only allow the white list through.
-  def post_params
-    params.require(:post).permit(current_user.id, :title, :body, :tag_list, :tag, :post_img, :post_img_cache, :slug)
-  end
-
-  def correct_user
-    unless current_user.admin? || current_user.id == @post.user_id
-      flash[:error] = "Access denied"
-      redirect_to root_path
+    def set_post
+      @post = Post.friendly.find(params[:id])
     end
+
+    def post_params
+      params.require(:post).permit(current_user.id, :title, :body, :tag_list, :tag, :post_img, :post_img_cache, :slug)
+    end
+
+    # даем разрешение на редактирование и удаление записей только админам, модераторам и создателям этой записи
+    def give_access_to_edit_record
+      unless current_user == nil ||
+              current_user.access_code == 111 || 
+              current_user.access_code == 110 || 
+              current_user.id == @plugin.user_id
+        flash[:error] = "You can't do it"
+        redirect_to plugins_path
+      end
+    end
+
+    # даем разрешение на создание новых записей всем зарегестрированным пользователям
+    def give_access_to_add_record
+      redirect_to plugins_path if current_user.nil?
+    end 
   end
-end
