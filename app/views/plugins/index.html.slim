@@ -6,8 +6,10 @@ h1 Listing plugins
   | &nbsp tag:&nbsp
   strong = raw plugin.tag_list.map { |t| link_to t, plugins_tags_path(t) }.join(', ')
   | &nbsp tag:&nbsp
+  strong = link_to 'Delete', plugin, method: :delete, data: { confirm: "You sure?" } 
+  | &nbsp tag:&nbsp
   - unless current_user.nil? || plugin.voted.include?(current_user.id)
-    = link_to 'Vote', vote_path(plugin)
+    = link_to 'Vote', plugins_vote_path(plugin)
   br
 
   br

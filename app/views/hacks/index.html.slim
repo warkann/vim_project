@@ -5,6 +5,10 @@ h1 Listing hacks
   strong = link_to hack.title, hack_path(hack)
   | &nbsp tag:&nbsp
   strong = raw hack.tag_list.map { |t| link_to t, hacks_tags_path(t) }.join(', ')
+  | &nbsp tag:&nbsp
+  - unless current_user.nil? || hack.voted.include?(current_user.id)
+    = link_to 'Vote', hacks_vote_path(hack)
+
   br
 
   br

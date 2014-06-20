@@ -72,7 +72,7 @@ class PostsController < ApplicationController
       unless current_user == nil ||
               current_user.access_code == 111 || 
               current_user.access_code == 110 || 
-              current_user.id == @plugin.user_id
+              current_user.id == @post.user_id
         flash[:error] = "You can't do it"
         redirect_to plugins_path
       end

@@ -1,6 +1,6 @@
 class HacksController < ApplicationController
-  before_action :set_hack, only: [:show, :edit, :update, :destroy]
-  before_action :give_access_to_edit_record, only: [:edit, :update, :destroy]
+  before_action :set_hack, only: [:show, :edit, :update, :destroy, :vote]
+  before_action :give_access_to_edit_record, only: [:edit, :update, :destroy, :vote]
   before_action :give_access_to_add_record, except: [:index, :show]
 
   def index
@@ -11,7 +11,7 @@ class HacksController < ApplicationController
     if params[:tag]
       @hacks = Hack.tagged_with(params[:tag])
     else
-      @hacks = Hack.all
+      @hacks = Hack.order('created_at ASC')
     end
   end
 
@@ -57,6 +57,19 @@ class HacksController < ApplicationController
     end
   end
 
+  # метод, отвечающий за рейтинг хака
+  def vote
+
+    # увеличиваем на 1 рейтинг хака и записываем в массив id текущего пользователя только один раз
+    unless @hack.voted.include?(current_user.id)
+      @hack.increment!(:popularity)
+      @hack.voted += [current_user.id]
+    end
+
+    @hack.save
+    redirect_to hacks_path
+  end
+
   private
 
     def set_hack
@@ -64,7 +77,7 @@ class HacksController < ApplicationController
     end
 
     def hack_params
-      params.require(:hack).permit(:title, :body, :tag_list, :tag, :slug)
+      params.require(:hack).permit(:title, :body, :tag_list, :tag, :slug, :popularity)
     end
 
     # даем разрешение на редактирование и удаление записей только админам, модераторам и создателям этой записи
@@ -72,7 +85,7 @@ class HacksController < ApplicationController
       unless current_user == nil ||
               current_user.access_code == 111 || 
               current_user.access_code == 110 || 
-              current_user.id == @plugin.user_id
+              current_user.id == @hack.user_id
         flash[:error] = "You can't do it"
         redirect_to plugins_path
       end

@@ -8,8 +8,9 @@ Rails.application.routes.draw do
   get 'plugins_tags/:tag', to: 'plugins#index', as: :plugins_tags
   get 'posts_tags/:tag', to: 'posts#index', as: :posts_tags  
   get 'hacks_tags/:tag', to: 'hacks#index', as: :hacks_tags
-  get 'plugins_vote/:id', to: 'plugins#vote', as: :vote
- 
+  get 'plugins_vote/:id', to: 'plugins#vote', as: :plugins_vote
+  get 'hacks_vote/:id', to: 'hacks#vote', as: :hacks_vote
+
   resources :posts
 
   # The priority is based upon order of creation: first created -> highest priority.
