@@ -11,7 +11,7 @@ class HacksController < ApplicationController
     if params[:tag]
       @hacks = Hack.tagged_with(params[:tag])
     else
-      @hacks = Hack.order('created_at ASC')
+      @hacks = Hack.order('popularity DESC')
     end
   end
 
@@ -61,12 +61,12 @@ class HacksController < ApplicationController
   def vote
 
     # увеличиваем на 1 рейтинг хака и записываем в массив id текущего пользователя только один раз
-    unless @hack.voted.include?(current_user.id)
+    unless current_user.hack_id.include?(@hack.id)
       @hack.increment!(:popularity)
-      @hack.voted += [current_user.id]
+      current_user.hack_id += [@hack.id]
     end
 
-    @hack.save
+    current_user.save
     redirect_to hacks_path
   end
 

@@ -9,6 +9,8 @@
 #  slug       :string(255)      not null
 #  created_at :datetime
 #  updated_at :datetime
+#  voted      :integer          default([]), is an Array
+#  popularity :integer          default(0)
 #
 
 class Hack < ActiveRecord::Base

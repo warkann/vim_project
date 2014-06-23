@@ -10,6 +10,8 @@
 #  slug        :string(255)      not null
 #  created_at  :datetime
 #  updated_at  :datetime
+#  popularity  :integer          default(0)
+#  voted       :integer          default([]), is an Array
 #
 
 class Plugin < ActiveRecord::Base

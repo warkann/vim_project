@@ -18,6 +18,8 @@
 #  created_at          :datetime
 #  updated_at          :datetime
 #  access_code         :integer          default(1)
+#  plugin_id           :integer          default([]), is an Array
+#  hack_id             :integer          default([]), is an Array
 #
 
 class User < ActiveRecord::Base

@@ -11,7 +11,7 @@ class PluginsController < ApplicationController
     if params[:tag]
       @plugins = Plugin.tagged_with(params[:tag])
     else
-      @plugins = Plugin.order('created_at ASC')
+      @plugins = Plugin.order('popularity DESC')
     end
   end
 
@@ -61,12 +61,12 @@ class PluginsController < ApplicationController
   def vote
 
     # увеличиваем на 1 рейтинг плагина и записываем в массив id текущего пользователя только один раз
-    unless @plugin.voted.include?(current_user.id)
+    unless current_user.plugin_id.include?(@plugin.id)
       @plugin.increment!(:popularity)
-      @plugin.voted += [current_user.id]
+      current_user.plugin_id += [@plugin.id]
     end
 
-    @plugin.save
+    current_user.save
     redirect_to plugins_path
   end
 
