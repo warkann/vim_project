@@ -85,6 +85,7 @@ ActiveRecord::Schema.define(version: 20140627072930) do
     t.integer  "user_id"
     t.string   "s_model"
     t.string   "s_action"
+    t.integer  "s_record_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

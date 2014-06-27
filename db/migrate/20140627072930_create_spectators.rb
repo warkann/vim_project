@@ -4,6 +4,7 @@ class CreateSpectators < ActiveRecord::Migration
     	t.integer :user_id
      	t.string	:s_model
     	t.string	:s_action
+    	t.integer :s_record_id
 
       t.timestamps
     end

@@ -29,7 +29,7 @@ class UsersController < ApplicationController
 	end
 
   def view_log
-  	@log_item = Spectator.find_each
+  	@log_item = Spectator.order('created_at ASC')
   end
   
 private

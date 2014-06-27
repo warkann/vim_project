@@ -5,4 +5,10 @@
 	strong = log.s_action	
 	|  the 
 	strong = log.s_model
+	|  
+	- if log.s_record_id.present? && log.s_model.classify.constantize.where('id = ?', log.s_record_id).exists?
+		= link_to "record", log.s_model.classify.constantize.find(log.s_record_id)
+		- else
+		|  record
 	br
+

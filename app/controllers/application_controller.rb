@@ -13,8 +13,27 @@ class ApplicationController < ActionController::Base
     end
 
     # метод, отслеживающий создание, изменение и удаление записей
+    # проверяем, не является ли текущий экшен "destroy", т.к. для него невозможно отобразить запись
+    # если экшен "destroy", то создаем лог-запись без id удаленной записи
+    # в любом другом экшене сначала получаем
     def spectate
-      Spectator.create(user_id: current_user.id, s_model: controller_name, s_action: action_name)
+      if action_name == "destroy"
+          Spectator.create(user_id: current_user.id,
+                           s_model: controller_name.classify,
+                           s_action: action_name)
+        elsif action_name == "create"
+          new_record = controller_name.classify.constantize.last
+          Spectator.create(user_id: current_user.id,
+                           s_model: controller_name.classify,
+                           s_action: action_name,
+                           s_record_id: new_record.id)
+        elsif action_name == "update"
+          Spectator.create(user_id: current_user.id,
+                           s_model: controller_name.classify,
+                           s_action: action_name,
+                           s_record_id: controller_name.classify.constantize.friendly.find(params[:id]).id)
+      end
+      $item = action_name.class
     end
 
   private
