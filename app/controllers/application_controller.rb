@@ -13,9 +13,11 @@ class ApplicationController < ActionController::Base
     end
 
     # метод, отслеживающий создание, изменение и удаление записей
-    # проверяем, не является ли текущий экшен "destroy", т.к. для него невозможно отобразить запись
-    # если экшен "destroy", то создаем лог-запись без id удаленной записи
-    # в любом другом экшене сначала получаем
+    # в зависимости от экшена, мы будем:
+    # destroy - создаваем spectator без id записи, т.к. ее нет
+    # create - сначала находим последнюю созданную в моделе запись, а потом сохраняем spectator, т.к. сразу после create id eще не доступе
+    # update - просто создаем spectator
+
     def spectate
       if action_name == "destroy"
           Spectator.create(user_id: current_user.id,
