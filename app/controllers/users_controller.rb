@@ -28,6 +28,10 @@ class UsersController < ApplicationController
 		end
 	end
 
+  def view_log
+  	@log_item = Spectator.find_each
+  end
+  
 private
 
   def set_user

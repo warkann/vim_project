@@ -10,6 +10,7 @@ Rails.application.routes.draw do
   get 'hacks_tags/:tag', to: 'hacks#index', as: :hacks_tags
   get 'plugins_vote/:id', to: 'plugins#vote', as: :plugins_vote
   get 'hacks_vote/:id', to: 'hacks#vote', as: :hacks_vote
+  get 'view_log', to: 'users#view_log', as: :log
 
   resources :posts
 

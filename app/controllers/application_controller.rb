@@ -1,6 +1,7 @@
 class ApplicationController < ActionController::Base
   before_action :configure_devise_permitted_parameters, if: :devise_controller?
-  
+  after_action :spectate, only: [:create, :update, :destroy]
+
   protect_from_forgery with: :exception
 
   protected
@@ -9,6 +10,11 @@ class ApplicationController < ActionController::Base
       devise_parameter_sanitizer.for(:sign_up) { |u| u.permit(:nickname, :user_img, :user_img_cache,:username, :login, :email, :password, :password_confirmation) }
       devise_parameter_sanitizer.for(:sign_in) { |u| u.permit(:nickname, :user_img, :user_img_cache,:username, :login, :email, :password, :password_confirmation) }
       devise_parameter_sanitizer.for(:account_update) { |u| u.permit(:role, :slug, :nickname, :user_img, :user_img_cache, :email, :password, :password_confirmation, :current_password) }
+    end
+
+    # метод, отслеживающий создание, изменение и удаление записей
+    def spectate
+      Spectator.create(user_id: current_user.id, s_model: controller_name, s_action: action_name)
     end
 
   private
