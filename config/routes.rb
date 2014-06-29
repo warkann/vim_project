@@ -11,7 +11,7 @@ Rails.application.routes.draw do
   get 'plugins_vote/:id', to: 'plugins#vote', as: :plugins_vote
   get 'hacks_vote/:id', to: 'hacks#vote', as: :hacks_vote
   get 'view_log', to: 'users#view_log', as: :log
-
+  get 'search', to: 'search#search', as: :search
   resources :posts
 
   # The priority is based upon order of creation: first created -> highest priority.

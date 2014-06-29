@@ -9,11 +9,13 @@
 #  slug       :string(255)      not null
 #  created_at :datetime
 #  updated_at :datetime
-#  voted      :integer          default([]), is an Array
 #  popularity :integer          default(0)
 #
 
 class Hack < ActiveRecord::Base
+	include PgSearch
+	multisearchable :against => [:title, :body]
+
 	validates_presence_of :title
 	validates_presence_of :body
 

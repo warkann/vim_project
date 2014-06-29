@@ -1,1 +1,7 @@
   <%= link_to "Plugins", plugins_path %> || <%= link_to "Hacks", hacks_path %> || <%= link_to "Color-schemas", colorschemas_path %> || <%= link_to ".dotfiles", dotfiles_path %> || <%= link_to "Blog", posts_path %> || <%= link_to "Community" %> || <% if user_signed_in? %><%= link_to "Contacts", users_path %> || <%= link_to 'Log', log_path %><% end %>
+  
+  <%= form_tag("/search", method: "get") do %>
+  <%= label_tag(:q, "Search for:") %>
+  <%= search_field_tag(:q) %>
+  <%= submit_tag("Search") %>
+  <% end %>

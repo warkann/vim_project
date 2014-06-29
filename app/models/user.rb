@@ -20,11 +20,13 @@
 #  access_code         :integer          default(1)
 #  plugin_id           :integer          default([]), is an Array
 #  hack_id             :integer          default([]), is an Array
+#  provider            :string(255)
+#  uid                 :string(255)
+#  name                :string(255)
 #
 
 class User < ActiveRecord::Base
-  # Include default devise modules. Others available are:
-  # :confirmable, :lockable, :timeoutable and :omniauthable
+  
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
   

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140627072930) do
+ActiveRecord::Schema.define(version: 20140628141808) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -53,6 +53,14 @@ ActiveRecord::Schema.define(version: 20140627072930) do
 
   add_index "hacks", ["slug"], name: "index_hacks_on_slug", unique: true, using: :btree
   add_index "hacks", ["title"], name: "index_hacks_on_title", using: :btree
+
+  create_table "pg_search_documents", force: true do |t|
+    t.text     "content"
+    t.integer  "searchable_id"
+    t.string   "searchable_type"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "plugins", force: true do |t|
     t.string   "title",                   null: false
@@ -127,6 +135,9 @@ ActiveRecord::Schema.define(version: 20140627072930) do
     t.integer  "access_code",         default: 1
     t.integer  "plugin_id",           default: [],                 array: true
     t.integer  "hack_id",             default: [],                 array: true
+    t.string   "provider"
+    t.string   "uid"
+    t.string   "name"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree

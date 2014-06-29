@@ -1,9 +1,9 @@
 class ApplicationController < ActionController::Base
   before_action :configure_devise_permitted_parameters, if: :devise_controller?
-  after_action :spectate, only: [:create, :update, :destroy]
+  after_action :spectate, only: [:create, :update, :destroy], unless: :devise_controller?
 
   protect_from_forgery with: :exception
-
+  
   protected
 
     def configure_devise_permitted_parameters
@@ -35,7 +35,6 @@ class ApplicationController < ActionController::Base
                            s_action: action_name,
                            s_record_id: controller_name.classify.constantize.friendly.find(params[:id]).id)
       end
-      $item = action_name.class
     end
 
   private

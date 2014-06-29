@@ -11,10 +11,12 @@
 #  created_at  :datetime
 #  updated_at  :datetime
 #  popularity  :integer          default(0)
-#  voted       :integer          default([]), is an Array
 #
 
 class Plugin < ActiveRecord::Base
+	include PgSearch
+	multisearchable :against => [:title, :description]
+
 	validates_presence_of :title
 	validates_presence_of :description
 	validates_presence_of :link

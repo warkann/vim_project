@@ -18,6 +18,6 @@ gem 'acts-as-taggable-on'
 gem 'carrierwave'
 gem "mini_magick"
 gem "friendly_id"
-
+gem 'pg_search'
 # gem "russian"
 # gem 'better_errors', group: :development
