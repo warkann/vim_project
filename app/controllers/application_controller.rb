@@ -1,7 +1,7 @@
 class ApplicationController < ActionController::Base
   before_action :configure_devise_permitted_parameters, if: :devise_controller?
   after_action :spectate, only: [:create, :update, :destroy], unless: :devise_controller?
-  before_action :give_access_to_add_record, except: [:index, :show], unless: :devise_controller?
+  before_action :give_access_to_add_record, except: [:index, :show, :search], unless: :devise_controller?
 
   protect_from_forgery with: :exception
 

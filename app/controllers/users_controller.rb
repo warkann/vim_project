@@ -64,6 +64,6 @@ class UsersController < ApplicationController
 
     # отправка на root_path вызывает рекурсию
     def user_present?
-    	redirect_to plugins_path if current_user
+    	redirect_to plugins_path if !current_user
     end
 end
