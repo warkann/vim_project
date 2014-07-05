@@ -1,7 +1,6 @@
 class DotfilesController < ApplicationController
   before_action :set_dotfile, only: [:show, :edit, :update, :destroy]
   before_action :give_access_to_edit_record, only: [:edit, :update, :destroy]
-  before_action :give_access_to_add_record, except: [:index, :show]
 
   def index
     @dotfiles = Dotfile.all
@@ -30,14 +29,10 @@ class DotfilesController < ApplicationController
   end
 
   def update
-    respond_to do |format|
-      if @dotfile.update(dotfile_params)
-        format.html { redirect_to @dotfile, notice: 'Dotfile was successfully updated.' }
-        format.json { render :show, status: :ok, location: @dotfile }
-      else
-        format.html { render :edit }
-        format.json { render json: @dotfile.errors, status: :unprocessable_entity }
-      end
+    if @dotfile.update(dotfile_params)
+      redirect_to @dotfile
+    else
+      render :edit
     end
   end
 
@@ -61,17 +56,6 @@ class DotfilesController < ApplicationController
 
     # даем разрешение на редактирование и удаление записей только админам, модераторам и создателям этой записи
     def give_access_to_edit_record
-      unless current_user == nil ||
-              current_user.access_code == 111 || 
-              current_user.access_code == 110 || 
-              current_user.id == @dotfile.user_id
-        flash[:error] = "You can't do it"
-        redirect_to plugins_path
-      end
+      check_permissions(@dotfile)
     end
-
-    # даем разрешение на создание новых записей всем зарегестрированным пользователям
-    def give_access_to_add_record
-      redirect_to plugins_path if current_user.nil?
-    end 
 end

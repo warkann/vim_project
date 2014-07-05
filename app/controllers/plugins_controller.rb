@@ -1,7 +1,6 @@
 class PluginsController < ApplicationController
   before_action :set_plugin, only: [:show, :edit, :update, :destroy, :vote]
-  before_action :give_access_to_edit_record, only: [:edit, :update, :destroy, :vote]
-  before_action :give_access_to_add_record, except: [:index, :show]
+  before_action :give_access_to_edit_record, only: [:edit, :update, :destroy]
 
   def index
     # Этот метод из application_controller.rb, предназначен для отображения количества используемых
@@ -38,14 +37,10 @@ class PluginsController < ApplicationController
   end
 
   def update
-    respond_to do |format|
-      if @plugin.update(plugin_params)
-        format.html { redirect_to @plugin, notice: 'Plugin was successfully updated.' }
-        format.json { render :show, status: :ok, location: @plugin }
-      else
-        format.html { render :edit }
-        format.json { render json: @plugin.errors, status: :unprocessable_entity }
-      end
+    if @plugin.update(plugin_params)
+      redirect_to @plugin
+    else
+      render :edit
     end
   end
 
@@ -59,19 +54,12 @@ class PluginsController < ApplicationController
 
   # метод, отвечающий за рейтинг плагина
   def vote
-
-    # увеличиваем на 1 рейтинг плагина и записываем в массив id текущего пользователя только один раз
-    unless current_user.plugin_id.include?(@plugin.id)
-      @plugin.increment!(:popularity)
-      current_user.plugin_id += [@plugin.id]
-    end
-
-    current_user.save
+    Plugin.vote(@plugin, current_user)
     redirect_to plugins_path
   end
 
   private
-    
+
     def set_plugin
       @plugin = Plugin.friendly.find(params[:id])
     end
@@ -80,19 +68,7 @@ class PluginsController < ApplicationController
       params.require(:plugin).permit(:title, :description, :link, :tag_list, :tag, :slug, :popularity)
     end
 
-    # даем разрешение на редактирование и удаление записей только админам, модераторам и создателям этой записи
     def give_access_to_edit_record
-      unless current_user == nil ||
-              current_user.access_code == 111 || 
-              current_user.access_code == 110 || 
-              current_user.id == @plugin.user_id
-        flash[:error] = "You can't do it"
-        redirect_to plugins_path
-      end
-    end
-
-    # даем разрешение на создание новых записей всем зарегестрированным пользователям
-    def give_access_to_add_record
-      redirect_to plugins_path if current_user.nil?
+      check_permissions(@plugin)
     end
   end

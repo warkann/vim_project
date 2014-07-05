@@ -1,8 +1,7 @@
 class ColorschemasController < ApplicationController
   before_action :set_colorschema, only: [:show, :edit, :update, :destroy]
   before_action :give_access_to_edit_record, only: [:edit, :update, :destroy]
-  before_action :give_access_to_add_record, except: [:index, :show]
-  
+
   def index
     @colorschemas = Colorschema.all
   end
@@ -30,14 +29,10 @@ class ColorschemasController < ApplicationController
   end
 
   def update
-    respond_to do |format|
-      if @colorschema.update(colorschema_params)
-        format.html { redirect_to @colorschema, notice: 'Colorschema was successfully updated.' }
-        format.json { render :show, status: :ok, location: @colorschema }
-      else
-        format.html { render :edit }
-        format.json { render json: @colorschema.errors, status: :unprocessable_entity }
-      end
+    if @colorschema.update(colorschema_params)
+      redirect_to @colorschema
+    else
+      render :edit
     end
   end
 
@@ -61,17 +56,6 @@ class ColorschemasController < ApplicationController
 
     # даем разрешение на редактирование и удаление записей только админам, модераторам и создателям этой записи
     def give_access_to_edit_record
-      unless current_user == nil ||
-              current_user.access_code == 111 || 
-              current_user.access_code == 110 || 
-              current_user.id == @colorschema.user_id
-        flash[:error] = "You can't do it"
-        redirect_to plugins_path
-      end
+      check_permissions(@colorschema)
     end
-
-    # даем разрешение на создание новых записей всем зарегестрированным пользователям
-    def give_access_to_add_record
-      redirect_to plugins_path if current_user.nil?
-    end 
 end

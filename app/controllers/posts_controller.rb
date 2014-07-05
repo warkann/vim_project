@@ -1,11 +1,10 @@
 class PostsController < ApplicationController
   before_action :set_post, only: [:show, :edit, :update, :destroy]
   before_action :give_access_to_edit_record, only: [:edit, :update, :destroy]
-  before_action :give_access_to_add_record, except: [:index, :show]
- 
+
 	def index
     # Этот метод из application_controller.rb, предназначен для отображения количества используемых
-    # в данной модели тэгов, в качестве аргумента передается название модели с заглавной буквы    
+    # в данной модели тэгов, в качестве аргумента передается название модели с заглавной буквы
     work_with_tags(:Post)
 
     if params[:tag]
@@ -38,15 +37,12 @@ class PostsController < ApplicationController
 	end
 
 	def update
-    respond_to do |format|
       if @post.update(post_params)
-        format.html { redirect_to @post, notice: 'Post was successfully updated.' }
-        format.json { render :show, status: :ok, location: @post }
+        redirect_to @post
       else
-        format.html { render :edit }
-        format.json { render json: @post.errors, status: :unprocessable_entity }
+        render :edit
       end
-    end	
+    end
 	end
 
 	def destroy
@@ -69,17 +65,6 @@ class PostsController < ApplicationController
 
     # даем разрешение на редактирование и удаление записей только админам, модераторам и создателям этой записи
     def give_access_to_edit_record
-      unless current_user == nil ||
-              current_user.access_code == 111 || 
-              current_user.access_code == 110 || 
-              current_user.id == @post.user_id
-        flash[:error] = "You can't do it"
-        redirect_to plugins_path
-      end
+      check_permissions(@post)
     end
-
-    # даем разрешение на создание новых записей всем зарегестрированным пользователям
-    def give_access_to_add_record
-      redirect_to plugins_path if current_user.nil?
-    end 
   end

@@ -19,5 +19,7 @@ gem 'carrierwave'
 gem "mini_magick"
 gem "friendly_id"
 gem 'pg_search'
+gem "cancan"
+
 # gem "russian"
 # gem 'better_errors', group: :development

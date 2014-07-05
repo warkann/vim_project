@@ -1,7 +1,6 @@
 class HacksController < ApplicationController
   before_action :set_hack, only: [:show, :edit, :update, :destroy, :vote]
   before_action :give_access_to_edit_record, only: [:edit, :update, :destroy, :vote]
-  before_action :give_access_to_add_record, except: [:index, :show]
 
   def index
     # Этот метод из application_controller.rb, предназначен для отображения количества используемых
@@ -38,14 +37,10 @@ class HacksController < ApplicationController
   end
 
   def update
-    respond_to do |format|
-      if @hack.update(hack_params)
-        format.html { redirect_to @hack, notice: 'Hack was successfully updated.' }
-        format.json { render :show, status: :ok, location: @hack }
-      else
-        format.html { render :edit }
-        format.json { render json: @hack.errors, status: :unprocessable_entity }
-      end
+    if @hack.update(hack_params)
+      redirect_to @hack
+    else
+      render :edit
     end
   end
 
@@ -82,17 +77,6 @@ class HacksController < ApplicationController
 
     # даем разрешение на редактирование и удаление записей только админам, модераторам и создателям этой записи
     def give_access_to_edit_record
-      unless current_user == nil ||
-              current_user.access_code == 111 || 
-              current_user.access_code == 110 || 
-              current_user.id == @hack.user_id
-        flash[:error] = "You can't do it"
-        redirect_to plugins_path
-      end
+      check_permissions(@hack)
     end
-
-    # даем разрешение на создание новых записей всем зарегестрированным пользователям
-    def give_access_to_add_record
-      redirect_to plugins_path if current_user.nil?
-    end 
 end

@@ -38,4 +38,18 @@ class Plugin < ActiveRecord::Base
 	def should_generate_new_friendly_id?
 		title_changed? || slug.blank?
 	end
+
+	private
+
+	# метод, отвечающий за рейтинг плагина
+  def self.vote(plugin, current_user)
+
+    # увеличиваем на 1 рейтинг плагина и записываем в массив id текущего пользователя только один раз
+    unless current_user.plugin_id.include?(plugin.id)
+      plugin.increment!(:popularity)
+      current_user.plugin_id += [plugin.id]
+    end
+
+    current_user.save
+   end
 end
