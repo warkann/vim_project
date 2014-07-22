@@ -58,13 +58,10 @@ class User < ActiveRecord::Base
   def self.build_plugins_list(current_user)
     list_of_user_plugins = Hash.new
     current_user.plugin_id.each do |id|
-
       if Plugin.where('id = ?', id ).exists?
         user_plugin = Plugin.find(id)
-
         # выдает корректные линки для исходных линков типа "https://github.com/..." и "github.com/". Для не подходящих по формату будет выдан NilClass
         correct_link = Plugin.find(id).link.sub!(/\A[https:\/\/]*[github.com\/]{11}/, "")
-
         # хэш состоящий из (объект модели Plugin => корректная ссылка)
         list_of_user_plugins.update( user_plugin => correct_link )
       end
@@ -75,20 +72,30 @@ class User < ActiveRecord::Base
   def self.build_user_directory(current_user)
     # создаем директорию для хранение дотфайлов рассортированных по юзерам. Выполнится однократно
     Dir.mkdir("public/users_dotfiles") unless Dir.exist?("public/users_dotfiles")
-
     # создаем личную папку юзера, если она еще не созданна
-    Dir.mkdir("public/users_dotfiles/user_#{current_user.email}") unless Dir.exist?("public/users_dotfiles/user_#{current_user.email}")
+    if current_user.email != ""
+      Dir.mkdir("public/users_dotfiles/user_#{current_user.email}") unless Dir.exist?("public/users_dotfiles/user_#{current_user.email}")
+    else
+      Dir.mkdir("public/users_dotfiles/user_#{current_user.uid}") unless Dir.exist?("public/users_dotfiles/user_#{current_user.uid}")
+    end
   end
 
   def self.file_exist?(current_user)
     # проверяем, существует ли создаваемый файл. Нужно для защиты от многократного создания одинаковых файлов. Создать файл можно каждую минуту.
-    File.exist?("public/users_dotfiles/user_#{current_user.email}/#{Time.now.strftime("%d_%m_%Y_%H_%M")}_#{current_user.email}_dotfile.vimrc")
+    if current_user.email != ""
+      File.exist?("public/users_dotfiles/user_#{current_user.email}/#{Time.now.strftime("%d_%m_%Y_%H_%M")}_#{current_user.email}_dotfile.vimrc")
+    else
+      File.exist?("public/users_dotfiles/user_#{current_user.uid}/#{Time.now.strftime("%d_%m_%Y_%H_%M")}_#{current_user.uid}_dotfile.vimrc")
+    end
   end
 
   def self.build_user_dotfile(current_user)
     # создаем файл конфигурации с временной меткой. Создать можно раз в минуту. Флаг "w+" перезаписывает содержимое
-    dotfile = File.new("public/users_dotfiles/user_#{current_user.email}/#{Time.now.strftime("%d_%m_%Y_%H_%M")}_#{current_user.email}_dotfile.vimrc", "w+")
-
+    if current_user.email != ""
+      dotfile = File.new("public/users_dotfiles/user_#{current_user.email}/#{Time.now.strftime("%d_%m_%Y_%H_%M")}_#{current_user.email}_dotfile.vimrc", "w+")
+    else
+      dotfile = File.new("public/users_dotfiles/user_#{current_user.uid}/#{Time.now.strftime("%d_%m_%Y_%H_%M")}_#{current_user.uid}_dotfile.vimrc", "w+")
+    end
     #создаем содержимое файла
     current_user.plugin_id.each do |id|
       if Plugin.where('id = ?', id ).exists?
@@ -101,5 +108,17 @@ class User < ActiveRecord::Base
       end
     end
     return dotfile
+  end
+
+  def self.create_with_omniauth(auth)
+    user = User.new
+      user.provider = auth["provider"]
+      user.uid = auth["uid"]
+      user.name = auth["info"]["name"]
+      user.slug = ''
+      user.nickname = ''
+      user.access_code = 100
+      user.save(validate: false)
+      user
   end
 end

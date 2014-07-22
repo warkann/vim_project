@@ -7,4 +7,6 @@ p
   strong Body:
   = @dotfile.body
 
-= link_to 'Back', request.referer
+= link_to 'Back', dotfiles_path
+= link_to 'Delete', @dotfile, method: :delete
+

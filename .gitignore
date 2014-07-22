@@ -24,6 +24,7 @@
 # Igrone uploads
 /public/assets/**
 
+/config/initializers/omniauth.rb
 /config/database.yml
 /Procfile
 /config/deploy

@@ -6,7 +6,6 @@ class PostsController < ApplicationController
     # Этот метод из application_controller.rb, предназначен для отображения количества используемых
     # в данной модели тэгов, в качестве аргумента передается название модели с заглавной буквы
     work_with_tags(:Post)
-
     if params[:tag]
       @posts = Post.tagged_with(params[:tag])
     else
@@ -23,34 +22,29 @@ class PostsController < ApplicationController
 
 	def create
     @post = current_user.posts.new(post_params)
-
-      if @post.save
-        flash[:success] = "Post was successfully created"
-        redirect_to @post
-      else
-        flash[:error] = "Post was not created"
-        render :new
-      end
+    if @post.save
+      flash[:success] = "Post was successfully created"
+      redirect_to @post
+    else
+      flash[:error] = "Post was not created"
+      render :new
+    end
 	end
 
 	def edit
 	end
 
 	def update
-      if @post.update(post_params)
-        redirect_to @post
-      else
-        render :edit
-      end
+    if @post.update(post_params)
+      redirect_to @post
+    else
+      render :edit
     end
 	end
 
 	def destroy
     @post.destroy
-    respond_to do |format|
-      format.html { redirect_to posts_url, notice: 'Post was successfully destroyed.' }
-      format.json { head :no_content }
-    end
+    redirect_to posts_path
 	end
 
   private

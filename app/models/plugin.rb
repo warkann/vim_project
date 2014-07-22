@@ -43,13 +43,11 @@ class Plugin < ActiveRecord::Base
 
 	# метод, отвечающий за рейтинг плагина
   def self.vote(plugin, current_user)
-
     # увеличиваем на 1 рейтинг плагина и записываем в массив id текущего пользователя только один раз
     unless current_user.plugin_id.include?(plugin.id)
       plugin.increment!(:popularity)
       current_user.plugin_id += [plugin.id]
     end
-
-    current_user.save
-   end
+    current_user.save(validate: false)
+  end
 end

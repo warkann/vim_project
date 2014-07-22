@@ -37,4 +37,13 @@ class Hack < ActiveRecord::Base
 		title_changed? || slug.blank?
 	end
 
+	# метод отвечающий за рейтинг хака
+	def self.vote(hack, current_user)
+ 	  # увеличиваем на 1 рейтинг хака и записываем в массив id текущего пользователя только один раз
+    unless current_user.hack_id.include?(hack.id)
+      hack.increment!(:popularity)
+      current_user.hack_id += [hack.id]
+    end
+    current_user.save(validate: false)
+	end
 end

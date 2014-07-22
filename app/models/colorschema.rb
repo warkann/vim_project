@@ -15,7 +15,7 @@
 class Colorschema < ActiveRecord::Base
 	include PgSearch
 	multisearchable :against => [:title, :body]
-	
+
 	validates_presence_of :title
 	validates_presence_of :body
 
@@ -37,5 +37,4 @@ class Colorschema < ActiveRecord::Base
 	def should_generate_new_friendly_id?
 		title_changed? || slug.blank?
 	end
-	
 end

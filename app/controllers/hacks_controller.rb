@@ -1,12 +1,11 @@
 class HacksController < ApplicationController
   before_action :set_hack, only: [:show, :edit, :update, :destroy, :vote]
-  before_action :give_access_to_edit_record, only: [:edit, :update, :destroy, :vote]
+  before_action :give_access_to_edit_record, only: [:edit, :update, :destroy]
 
   def index
     # Этот метод из application_controller.rb, предназначен для отображения количества используемых
     # в данной модели тэгов, в качестве аргумента передается название модели с заглавной буквы
     work_with_tags(:Hack)
-
     if params[:tag]
       @hacks = Hack.tagged_with(params[:tag])
     else
@@ -26,14 +25,13 @@ class HacksController < ApplicationController
 
   def create
     @hack = current_user.hacks.new(hack_params)
-
-      if @hack.save
-        flash[:success] = "Hack was successfully created"
-        redirect_to @hack
-      else
-        flash[:error] = "Hack was not created"
-        render :new
-      end
+    if @hack.save
+      flash[:success] = "Hack was successfully created"
+      redirect_to @hack
+    else
+      flash[:error] = "Hack was not created"
+      render :new
+    end
   end
 
   def update
@@ -46,22 +44,12 @@ class HacksController < ApplicationController
 
   def destroy
     @hack.destroy
-    respond_to do |format|
-      format.html { redirect_to hacks_url, notice: 'Hack was successfully destroyed.' }
-      format.json { head :no_content }
-    end
+    redirect_to hacks_path
   end
 
   # метод, отвечающий за рейтинг хака
   def vote
-
-    # увеличиваем на 1 рейтинг хака и записываем в массив id текущего пользователя только один раз
-    unless current_user.hack_id.include?(@hack.id)
-      @hack.increment!(:popularity)
-      current_user.hack_id += [@hack.id]
-    end
-
-    current_user.save
+    Hack.vote(@hack, current_user)
     redirect_to hacks_path
   end
 

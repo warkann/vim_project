@@ -1,20 +1,27 @@
 Rails.application.routes.draw do
-  resources :hacks
   resources :colorschemas
+
   resources :dotfiles
+
+  resources :hacks
+  get 'hacks_tags/:tag', to: 'hacks#index', as: :hacks_tags
+  get 'hacks_vote/:id', to: 'hacks#vote', as: :hacks_vote
+
   devise_for :users
   resources :users
-  resources :plugins
-  get 'plugins_tags/:tag', to: 'plugins#index', as: :plugins_tags
-  get 'posts_tags/:tag', to: 'posts#index', as: :posts_tags
-  get 'hacks_tags/:tag', to: 'hacks#index', as: :hacks_tags
-  get 'plugins_vote/:id', to: 'plugins#vote', as: :plugins_vote
-  get 'hacks_vote/:id', to: 'hacks#vote', as: :hacks_vote
   get 'view_log', to: 'users#view_log', as: :log
-  get 'search', to: 'search#search', as: :search
   get 'view_plugins_list', to: 'users#view_plugins_list', as: :plugins_list
   post 'create_dotfile', to: 'users#create_dotfile', as: :create_dotfile
+
   resources :posts
+  get 'posts_tags/:tag', to: 'posts#index', as: :posts_tags
+
+  resources :plugins
+  get 'plugins_tags/:tag', to: 'plugins#index', as: :plugins_tags
+  get 'plugins_vote/:id', to: 'plugins#vote', as: :plugins_vote
+
+  get 'search', to: 'search#search', as: :search
+  match "/auth/:provider/callback" => "sessions#create", via: [:get, :post]
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

@@ -18,14 +18,13 @@ class ColorschemasController < ApplicationController
 
   def create
     @colorschema = current_user.colorschemas.new(colorschema_params)
-
-      if @colorschema.save
-        flash[:success] = "Color schema was successfully created"
-        redirect_to @colorschema
-      else
-        flash[:error] = "Color schema was not created"
-        render :new
-      end
+    if @colorschema.save
+      flash[:success] = "Color schema was successfully created"
+      redirect_to @colorschema
+    else
+      flash[:error] = "Color schema was not created"
+      render :new
+    end
   end
 
   def update
@@ -38,10 +37,7 @@ class ColorschemasController < ApplicationController
 
   def destroy
     @colorschema.destroy
-    respond_to do |format|
-      format.html { redirect_to colorschemas_url, notice: 'Colorschema was successfully destroyed.' }
-      format.json { head :no_content }
-    end
+    redirect_to colorschemas_path
   end
 
   private

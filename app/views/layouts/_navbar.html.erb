@@ -1,4 +1,4 @@
-  <%= link_to "Plugins", plugins_path %> || <%= link_to "Hacks", hacks_path %> || <%= link_to "Color-schemas", colorschemas_path %> || <%= link_to ".dotfiles", dotfiles_path %> || <%= link_to "Blog", posts_path %> || <%= link_to "Community" %> || <% if user_signed_in? %><%= link_to "Contacts", users_path %> || <%= link_to 'Log', log_path %><% end %> || <%= link_to 'View plugins list', plugins_list_path %> || <%= button_to 'Create dotfile',  create_dotfile_path %>
+<%= link_to "Google", '/auth/google_oauth2' %>, <%= link_to "GitHub", "/auth/github" %>,  <%= link_to "Twitter", "/auth/twitter" %>, <%= link_to "Plugins", plugins_path %> || <%= link_to "Hacks", hacks_path %> || <%= link_to "Color-schemas", colorschemas_path %> || <%= link_to ".dotfiles", dotfiles_path %> || <%= link_to "Blog", posts_path %> || <%= link_to "Community" %> || <% if user_signed_in? %><%= link_to "Contacts", users_path %> || <%= link_to 'Log', log_path %><% end %> || <%= link_to 'View plugins list', plugins_list_path %> || <%= button_to 'Create dotfile',  create_dotfile_path %>
 
   <%= form_tag("/search", method: "get") do %>
   <%= label_tag(:q, "Search for:") %>

@@ -6,7 +6,6 @@ class PluginsController < ApplicationController
     # Этот метод из application_controller.rb, предназначен для отображения количества используемых
     # в данной модели тэгов, в качестве аргумента передается название модели с заглавной буквы
     work_with_tags(:Plugin)
-
     if params[:tag]
       @plugins = Plugin.tagged_with(params[:tag])
     else
@@ -26,14 +25,13 @@ class PluginsController < ApplicationController
 
   def create
     @plugin = current_user.plugins.new(plugin_params)
-
-      if @plugin.save
-        flash[:success] = "Plugin was successfully created"
-        redirect_to @plugin
-      else
-        flash[:error] = "Plugin was not created"
-        render :new
-      end
+    if @plugin.save
+      flash[:success] = "Plugin was successfully created"
+      redirect_to @plugin
+    else
+      flash[:error] = "Plugin was not created"
+      render :new
+    end
   end
 
   def update
@@ -46,10 +44,7 @@ class PluginsController < ApplicationController
 
   def destroy
     @plugin.destroy
-    respond_to do |format|
-      format.html { redirect_to plugins_url, notice: 'Plugin was successfully destroyed.' }
-      format.json { head :no_content }
-    end
+    redirect_to plugins_path
   end
 
   # метод, отвечающий за рейтинг плагина

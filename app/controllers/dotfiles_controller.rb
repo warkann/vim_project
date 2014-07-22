@@ -18,14 +18,13 @@ class DotfilesController < ApplicationController
 
   def create
     @dotfile = current_user.dotfiles.new(dotfile_params)
-
-      if @dotfile.save
-        flash[:success] = "Dotfile was successfully created"
-        redirect_to @dotfile
-      else
-        flash[:error] = "Dotfile was not created"
-        render :new
-      end
+    if @dotfile.save
+      flash[:success] = "Dotfile was successfully created"
+      redirect_to @dotfile
+    else
+      flash[:error] = "Dotfile was not created"
+      render :new
+    end
   end
 
   def update
@@ -38,10 +37,7 @@ class DotfilesController < ApplicationController
 
   def destroy
     @dotfile.destroy
-    respond_to do |format|
-      format.html { redirect_to dotfiles_url, notice: 'Dotfile was successfully destroyed.' }
-      format.json { head :no_content }
-    end
+    redirect_to dotfiles_path
   end
 
   private
