@@ -21,7 +21,7 @@ Rails.application.routes.draw do
   get 'plugins_vote/:id', to: 'plugins#vote', as: :plugins_vote
 
   get 'search', to: 'search#search', as: :search
-  match "/auth/:provider/callback" => "sessions#create", via: [:get, :post]
+  match "/auth/:provider/callback" => "sessions#create", via: [:get]
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
