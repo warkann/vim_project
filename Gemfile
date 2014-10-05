@@ -19,6 +19,7 @@ gem 'carrierwave'
 gem "mini_magick"
 gem "friendly_id"
 gem 'pg_search'
+gem 'rails_12factor'
 
 gem "omniauth"
 gem "omniauth-github"
